@@ -1,7 +1,19 @@
+import { useState } from "react";
+import Register from "./forms/Register";
+import Login from "./forms/Login";
 import "./App.css";
 
-export default function App() {
-  return (
-    <h1 className="text-3xl text-blue-500 font-bold underline">Hello world!</h1>
-  );
-}
+const App = () => {
+  const [formType, setFormType] = useState("register");
+
+  const renderForm = () => {
+    if (formType === "register")
+      return <Register changeForm={() => setFormType("login")} />;
+    if (formType === "login")
+      return <Login changeForm={() => setFormType("register")} />;
+  };
+
+  return renderForm();
+};
+
+export default App;

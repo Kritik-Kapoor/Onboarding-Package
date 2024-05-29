@@ -1,0 +1,9 @@
+.input-error {
+  color: #bf1650;
+  font-size: 13px;
+}
+
+.input-error::before {
+  display: inline;
+  content: "⚠ ";
+}
