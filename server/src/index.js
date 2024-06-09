@@ -18,4 +18,14 @@ app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
 });
 
-connectDB();
+connectDB()
+  .then(() => {
+    app.on("error", (error) => {
+      console.log("ERROR", error);
+      throw error;
+    });
+    app.listen(PORT || 4000, () => {
+      console.log(`Server running at PORT : $${PORT}`);
+    });
+  })
+  .catch((error) => console.log("MONGO DB Conneciton failed !!", error));
