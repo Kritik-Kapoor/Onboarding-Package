@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useState } from "react";
+import axios from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "../../components/ui/button";
 import {
@@ -14,23 +15,34 @@ import { Label } from "../../components/ui/label";
 import "./form.css";
 
 interface IFormInput {
-  name: string;
+  username: string;
   email: string;
   password: string;
 }
 
 const Register: React.FC<{ changeForm: () => void }> = ({ changeForm }) => {
+  const [error, setError] = useState(null);
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitSuccessful },
-    reset,
+    formState: { errors },
   } = useForm<IFormInput>();
-  const registerUser: SubmitHandler<IFormInput> = (data) => console.log(data);
 
-  useEffect(() => {
-    if (isSubmitSuccessful) reset();
-  }, [isSubmitSuccessful, reset]);
+  const registerUser: SubmitHandler<IFormInput> = (data) => {
+    axios
+      .post("/api/v1/users/register", {
+        username: data.username,
+        email: data.email,
+        password: data.password,
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        setError(err.response.status);
+        console.log(err);
+      });
+  };
 
   return (
     <Card className="w-[400px]">
@@ -41,16 +53,21 @@ const Register: React.FC<{ changeForm: () => void }> = ({ changeForm }) => {
       <CardContent>
         <form onSubmit={handleSubmit(registerUser)}>
           <div className="grid w-full items-center gap-4 text-start">
+            {error === 400 && (
+              <p role="alert" className="input-error">
+                All fields are mandatory
+              </p>
+            )}
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name">Username</Label>
               <Input
-                id="name"
-                placeholder="Name"
-                {...register("name", { required: "Name is required" })}
+                id="username"
+                placeholder="Username"
+                {...register("username", { required: "Username is required" })}
               />
-              {errors.name && (
+              {errors.username && (
                 <p role="alert" className="input-error">
-                  {errors.name.message}
+                  {errors.username.message}
                 </p>
               )}
             </div>
@@ -65,6 +82,11 @@ const Register: React.FC<{ changeForm: () => void }> = ({ changeForm }) => {
               {errors.email && (
                 <p role="alert" className="input-error">
                   {errors.email.message}
+                </p>
+              )}
+              {error === 409 && (
+                <p role="alert" className="input-error">
+                  Email is already registered
                 </p>
               )}
             </div>
