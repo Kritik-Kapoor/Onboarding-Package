@@ -36,6 +36,7 @@ const Register: React.FC<{ changeForm: () => void }> = ({ changeForm }) => {
         password: data.password,
       })
       .then((response) => {
+        setError(null);
         console.log(response);
       })
       .catch((err) => {
