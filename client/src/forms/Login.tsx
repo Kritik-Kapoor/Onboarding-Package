@@ -1,3 +1,4 @@
+import { useState } from "react";
 import axios from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "../../components/ui/button";
@@ -12,7 +13,7 @@ import {
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import "./form.css";
-import { useState } from "react";
+import { AtSign, LockKeyhole } from "lucide-react";
 
 interface IFormInput {
   email: string;
@@ -69,12 +70,15 @@ const Login: React.FC<{ changeForm: () => void }> = ({ changeForm }) => {
           <div className="grid w-full items-center gap-4 text-start">
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="Email"
-                {...register("email", { required: "Email is required" })}
-              />
+              <div className="relative">
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Email"
+                  {...register("email", { required: "Email is required" })}
+                />
+                <AtSign className="input-icon" size={18} />
+              </div>
               {errors.email && (
                 <p role="alert" className="input-error">
                   {errors.email.message}
@@ -83,14 +87,17 @@ const Login: React.FC<{ changeForm: () => void }> = ({ changeForm }) => {
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Password"
-                {...register("password", {
-                  required: "Password is required",
-                })}
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Password"
+                  {...register("password", {
+                    required: "Password is required",
+                  })}
+                />
+                <LockKeyhole className="input-icon" size={18} />
+              </div>
               {errors.password && (
                 <p role="alert" className="input-error">
                   {errors.password.message}
@@ -102,9 +109,12 @@ const Login: React.FC<{ changeForm: () => void }> = ({ changeForm }) => {
         </form>
       </CardContent>
       <CardFooter className="flex justify-center gap-2">
-        Don't have an account ?{" "}
-        <span className="text-blue-500 cursor-pointer" onClick={changeForm}>
-          Register
+        Don't have an account yet?{" "}
+        <span
+          className="text-blue-600 font-medium cursor-pointer"
+          onClick={changeForm}
+        >
+          Sign Up
         </span>
       </CardFooter>
     </Card>

@@ -7,3 +7,11 @@
   display: inline;
   content: "⚠ ";
 }
+
+.input-icon {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translate(-5px, -50%);
+  opacity: 0.3;
+}
